@@ -1,0 +1,6 @@
+# Workload profiles (mean token counts). Mirrors PROFILES in src/workload.py.
+workloads:
+  chat:      {prompt: 256,  output: 256,  pattern: poisson, rate: 20, n: 500}
+  rag:       {prompt: 2048, output: 300,  pattern: poisson, rate: 10, n: 300}
+  summarise: {prompt: 3072, output: 512,  pattern: uniform, rate: 5,  n: 200}
+  batch_gen: {prompt: 512,  output: 1024, pattern: offline, rate: 0,  n: 1000}

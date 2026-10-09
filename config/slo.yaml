@@ -1,0 +1,7 @@
+# Service-level objectives + budget. The benchmark gates PASS/FAIL on these.
+slo:
+  ttft_p90_ms: 500          # time-to-first-token, 90th percentile
+  e2e_p99_ms: 8000          # end-to-end latency, 99th percentile
+  min_throughput_rps: 15    # minimum sustained requests/second
+  max_aud_per_1m_tokens: 2.00
+  min_success_rate: 0.99

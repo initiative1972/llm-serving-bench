@@ -1,0 +1,14 @@
+# Serving engines to benchmark. Illustrative; adjust models/flags to your hardware.
+engines:
+  - name: vllm-fp16
+    runtime: vllm
+    quant: fp16
+    args: "--dtype auto --max-model-len 8192"
+  - name: vllm-awq
+    runtime: vllm
+    quant: awq
+    args: "--quantization awq --dtype half --max-model-len 8192"
+  - name: tgi-gptq
+    runtime: tgi
+    quant: gptq
+    args: "--quantize gptq --max-input-length 4096 --max-total-tokens 8192"

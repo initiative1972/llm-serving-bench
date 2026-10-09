@@ -1,0 +1,51 @@
+{
+  "title": "LLM Serving — Latency, Throughput, GPU",
+  "uid": "llm-serving-bench",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": true,
+  "time": {"from": "now-30m", "to": "now"},
+  "refresh": "5s",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "TTFT p90 (s) — vLLM",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.9, sum(rate(vllm:time_to_first_token_seconds_bucket[1m])) by (le))",
+          "legendFormat": "ttft p90"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Generation throughput (tokens/s) — vLLM",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "targets": [
+        {
+          "expr": "sum(rate(vllm:generation_tokens_total[1m]))",
+          "legendFormat": "output tok/s"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Running / waiting requests — vLLM",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "targets": [
+        {"expr": "vllm:num_requests_running", "legendFormat": "running"},
+        {"expr": "vllm:num_requests_waiting", "legendFormat": "waiting"}
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "GPU utilisation & memory (DCGM)",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+      "targets": [
+        {"expr": "DCGM_FI_DEV_GPU_UTIL", "legendFormat": "gpu util %"},
+        {"expr": "DCGM_FI_DEV_FB_USED", "legendFormat": "fb used (MiB)"}
+      ]
+    }
+  ]
+}

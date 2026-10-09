@@ -1,0 +1,34 @@
+# Minimal monitoring stack for LLM serving: Prometheus + Grafana + GPU metrics.
+# vLLM exposes Prometheus metrics at /metrics; TGI at :PORT/metrics.
+#   docker compose -f monitoring/docker-compose.yml up -d
+#   Grafana: http://localhost:3000  (anonymous viewer enabled)
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    ports: ["9090:9090"]
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+
+  grafana:
+    image: grafana/grafana:latest
+    ports: ["3000:3000"]
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on: ["prometheus"]
+
+  # GPU telemetry (utilisation, memory, power, temperature). Needs NVIDIA runtime.
+  dcgm-exporter:
+    image: nvidia/dcgm-exporter:latest
+    cap_add: ["SYS_ADMIN"]
+    ports: ["9400:9400"]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: ["gpu"]

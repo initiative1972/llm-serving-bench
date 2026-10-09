@@ -1,0 +1,6 @@
+# Live GPU serving dependencies — install ONLY on a CUDA box, not in CI.
+# vLLM pulls in a specific torch/CUDA build; follow the vLLM install guide for
+# your CUDA version rather than pinning blindly here.
+#
+#   vllm>=0.5
+#   (TGI runs as a Docker image — see scripts/serve_tgi.sh, no pip needed)
